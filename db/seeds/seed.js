@@ -9,16 +9,31 @@ exports.seed = (knex, Promise) => {
       return knex('topics')
         .insert(topicsData)
         .returning('*');
-    })
-    .then(topicRows => {
-      const userInsertions = knex('users')
-      .insert(usersData)
-      .returning('*')
+        .then(() => {
+          // insert data
+          return knex('users')
+            .insert(usersData)
+            .returning('*');
+          })
+        })
+          //.then((insertedTopics, insertedUsers) =>)
+}
 
-       return Promise.all([topicRows, userInsertions])
-      
-    })
-      .then(([topicRows, userRows]) => {
-        console.log('finished seeding!')
+exports.seed = function (knex, Promise) {
+  return knex
+    .insert(ownerData)
+    .into('owners')
+    .returning('*')
+    .then((insertedOwners) => {
+      return knex
+        .insert(shopObjReformatter(ownerRefGen(insertedOwners), shopData))
+        .into('shops')
+        .returning('*')
+        .then((insertedShops) => {
+          return knex
+            .insert(treasureObjReformatter(shopRefGen(insertedShops), treasureData))
+            .into('treasures')
+            .returning('*');
+        });
     });
 };
