@@ -7,7 +7,18 @@ exports.seed = (knex, Promise) => {
     .then(() => {
       // insert data
       return knex('topics')
-      .insert(topicsData)
+        .insert(topicsData)
+        .returning('*');
+    })
+    .then(topicRows => {
+      const userInsertions = knex('users')
+      .insert(usersData)
       .returning('*')
-    });
+
+       return Promise.all([topicRows, userRows])
+      
+    })
+      .then(([topicRows, userRows]) => {
+        console.log('finished seeding...')
+    })
 };
