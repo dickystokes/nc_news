@@ -1,4 +1,4 @@
-const { topicsData, usersData, articlesData, commentsData } = require('../data');
+const { topicsData, usersData, articlesData, commentsData } = require('../data/index');
 
 exports.seed = (knex, Promise) => {
   return knex.migrate
@@ -15,10 +15,10 @@ exports.seed = (knex, Promise) => {
       .insert(usersData)
       .returning('*')
 
-       return Promise.all([topicRows, userRows])
+       return Promise.all([topicRows, userInsertions])
       
     })
       .then(([topicRows, userRows]) => {
-        console.log('finished seeding...')
-    })
+        console.log('finished seeding!')
+    });
 };
