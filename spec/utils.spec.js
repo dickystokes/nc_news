@@ -20,7 +20,7 @@ const { commentsReformatter } = require('../db/utils/comments-reformatter')
               votes: 16,
               created_at: new Date(1511354163389)
             }]
-            expect(commentsReformatter(test1)).to.eql(output1)
+            expect(articlesReformatter(test1)).to.eql(output1)
         })
 
         it('returns an array of objects in the correct format for seed for any length', () => {
@@ -57,7 +57,7 @@ const { commentsReformatter } = require('../db/utils/comments-reformatter')
                 votes: 100,
                 created_at: new Date (1448282163389)
               }]
-            expect(commentsReformatter(test2)).to.eql(output2)
+            expect(articlesReformatter(test2)).to.eql(output2)
         });
     });
 
@@ -91,7 +91,7 @@ const { commentsReformatter } = require('../db/utils/comments-reformatter')
               }]
 
 
-            expect(articlesReformatter(commentsIn, articlesRef)).to.eql(commentsOut)
+            expect(commentsReformatter(commentsIn, articlesRef)).to.eql(commentsOut)
             
         });
         

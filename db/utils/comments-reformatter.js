@@ -1,5 +1,5 @@
 
-function commentsReformatter(comments, articles, users) {
+function commentsReformatter(comments, articles) {
    
     const articleidMaker = {};
     for (let i = 0; i < articles.length; i++) {
