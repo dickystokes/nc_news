@@ -16,9 +16,9 @@ function commentsReformatter(commentsArr) {
    let output = []
     
     for (let i = 0; i < commentsArr.length; i++) {
-    const article = {...commentsArr[i], created_at : new Date(commentsArr[i].created_at)}
+    const comment = {...commentsArr[i], created_at : new Date(commentsArr[i].created_at)}
         
-    output.push(article)
+    output.push(comment)
 }
     return output
 }

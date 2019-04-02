@@ -5,7 +5,8 @@ const {
   commentsData
 } = require("../data/index");
 
-const {articlesReformatter, commentsReformatter} = require('../utils/date-reformatter')
+const {articlesReformatter} = require('../utils/date-reformatter')
+const {commentsReformatter} = require('../utils/comments-reformatter')
 
 exports.seed = (knex, Promise) => {
   return knex.migrate
@@ -22,47 +23,19 @@ exports.seed = (knex, Promise) => {
           .returning("*")
       ])
         .then(([topicsRows, usersRows]) => {
+          console.log(topicsRows.length, usersRows.length)
           return knex('articles')
           .insert(articlesReformatter(articlesData))
           .returning('*')
         })
         .then(articleRows => {
+          console.log(articleRows.length)
           return knex('comments')
-          .insert(commentsReformatter(commentsData))
+          .insert(commentsReformatter(commentsData, articleRows))
           .returning('*')
-        });
+        }).then((commentRows) => {
+          console.log(commentRows.length)
+        })
 
     })
 }
-
-    //   return knex("topics")
-    //     .insert(topicsData)
-    //     .returning("*")
-    //     .then(topicRows => {
-    //       const userInsertions = knex("users")
-    //         .insert(usersData)
-    //         .returning("*");
-    //       Promise.all([topicRows, userInsertions]).then(
-    //         ([topicRows, userRows]) => {
-    //           const articleInsertions = knex("articles")
-    //             .insert(articlesData)
-    //             .returning("*");
-    //           Promise.all([topicRows, userRows, articleInsertions]).then(
-    //             ([topicRows, userRows, articleRows]) => {
-    //               const commentInsertions = knex("comments")
-    //                 .insert(commentsData)
-    //                 .returning("*");
-    //               return Promise.all([
-    //                 topicRows,
-    //                 userRows,
-    //                 articleRows,
-    //                 commentInsertions
-    //               ]);
-    //             }
-    //           );
-    //         }
-    //       );
-    //     });
-    // });
-
-  //.then((insertedTopics, insertedUsers) =>)
