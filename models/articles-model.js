@@ -29,3 +29,16 @@ exports.fetchArticleByID = (article_id) => {
     .from('articles')
     .groupBy('articles.article_id')
 };
+
+exports.updateArticleByID = (article_id, amount) => {
+  return connection('articles')
+  .where('articles.article_id', '=', article_id)
+  .increment('votes', amount)
+  .returning('*') 
+}
+
+exports.deleteArticleByID = (req, res, next) => {
+  return connection('articles')
+  .where('articles.article_id', '=', req.params.article_id)
+  .del()
+}

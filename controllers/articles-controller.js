@@ -1,4 +1,4 @@
-const { fetchArticles, fetchArticleByID } = require('../models/articles-model');
+const { fetchArticles, fetchArticleByID, updateArticleByID, deleteArticleByID} = require('../models/articles-model');
 
 exports.getArticles = (req, res, next) => {
   fetchArticles(req.query)
@@ -13,4 +13,18 @@ exports.getArticlesByID = (req, res, next) => {
     res.status(200).send({article});
   })
   .catch();
+}
+
+exports.patchArticle = (req, res, next) => {
+  updateArticleByID(req.params.article_id, req.query.vote_inc)
+  .then(article => {
+    res.status(202).send({article})
+  })
+}
+
+exports.deleteArticle = (req, res, next) => {
+  deleteArticleByID(req)
+  .then(article => {
+    res.status(204).send()
+  })
 }

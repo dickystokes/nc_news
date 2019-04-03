@@ -95,5 +95,40 @@ describe('/', () => {
           expect(res.body.article[0].article_id).to.equal(1)
         })
     });
+    it.only('GET status 202 and update number of votes by 1', () => {
+      return request
+        .patch('/api/articles/1?vote_inc=1')
+        .expect(202)
+        .then((res) => {
+          //console.log(res.body.article[0].votes)
+          expect(res.body.article[0].votes).to.equal(101)
+        })
+    });
+
+    it.only('GET status 202 and update number of votes by -1', () => {
+      return request
+        .patch('/api/articles/1?vote_inc=-1')
+        .expect(202)
+        .then((res) => {
+          //console.log(res.body.article[0].votes)
+          expect(res.body.article[0].votes).to.equal(99)
+        })
+    });
+
+    it.only('GET status 204 and removes article', () => {
+      return request
+        .delete('/api/articles/2')
+        .expect(204)
+        .then((res) => {
+          return request
+          .get('/api/articles')
+          .then((res) => {
+            res.body.articles.forEach(article => {
+              expect(article.article_id !== 2).to.equal(true)
+            })
+          
+        })
+    });
   });
+});
 });
