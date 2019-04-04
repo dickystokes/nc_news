@@ -37,8 +37,9 @@ exports.updateArticleByID = (article_id, amount) => {
   .returning('*') 
 }
 
-exports.deleteArticleByID = (req, res, next) => {
+exports.deleteArticleByID = (article_id) => {
   return connection('articles')
-  .where('articles.article_id', '=', req.params.article_id)
+  .where('articles.article_id', '=', article_id)
   .del()
 }
+

@@ -128,9 +128,80 @@ describe('/', () => {
             })
           
           })
+        });
       });
     });
+
+    it('GET status 200 and retreives comments for given article_id', () => {
+      return request
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then((res) => {
+          expect(res.body.comments[0]).to.have.any.keys('comment_id', 'author', 'article_id', 'votes', 'created_at', 'body')
+          res.body.comments.forEach(comment => {
+            expect(comment.article_id).to.eql(1)
+
+          })
+        });
+      });
+      
+
+    it('GET status 200 and sorts comments for given article_id', () => {
+      return request
+        .get('/api/articles/1/comments?sort_by=created_at')
+        .expect(200)
+        .then((res) => {
+          expect(res.body.comments).to.be.sortedBy('created_at', {descending: true}) 
+        });
+    });
+
+    it('GET status 202 and posts new comment', () => {
+      return request
+        .post('/api/articles/1/comments')
+        .send({username: 'icellusedkars', body : 'new comment about article 1'})
+        .expect(202)
+        .then((res) => {
+          expect(res.body.comment[0].comment_id).to.eql(19)
+          expect(res.body.comment[0].author).to.eql('icellusedkars')
+          expect(res.body.comment[0].body).to.eql('new comment about article 1')
+        });
+    });
+  
+
+  describe('/comments', () => {
+    it.only('GET 202 updates comment votes', () => {
+      return request
+      .patch('/api/comments/1?vote_inc=1')
+        .expect(202)
+        .then((res) => {
+          expect(res.body.comment[0].votes).to.equal(17)
+          return request
+          .patch('/api/comments/1?vote_inc=3')
+          .expect(202)
+          .then((res) => {
+            expect(res.body.comment[0].votes).to.equal(20)
+            return request
+            .patch('/api/comments/1?vote_inc=-10')
+            .expect(202)
+            .then((res) => {
+              expect(res.body.comment[0].votes).to.equal(10)
+            });
+          });
+        });
+      });
+    it.only('GET 204 deletes comment', () => {
+      return request
+      .delete('/api/comments/2')
+        .expect(204)
+        .then((res) => {
+          return request
+          .get('/api/comments/2')
+          .expect(404)
+        });
+    });
   });
+  
+
 
   describe('/users', () => {
     it('GET status 200 and returns a user by username buter_bridge', () => {
@@ -157,9 +228,7 @@ describe('/', () => {
           name: 'sam',
           avatar_url: 'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4',
         }])
-      })
-      
-    });
-    
+      }) 
+    }); 
   });
 });
