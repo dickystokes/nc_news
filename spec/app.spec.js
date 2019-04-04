@@ -95,7 +95,7 @@ describe('/', () => {
           expect(res.body.article[0].article_id).to.equal(1)
         })
     });
-    it.only('GET status 202 and update number of votes by 1', () => {
+    it('GET status 202 and update number of votes by 1', () => {
       return request
         .patch('/api/articles/1?vote_inc=1')
         .expect(202)
@@ -105,7 +105,7 @@ describe('/', () => {
         })
     });
 
-    it.only('GET status 202 and update number of votes by -1', () => {
+    it('GET status 202 and update number of votes by -1', () => {
       return request
         .patch('/api/articles/1?vote_inc=-1')
         .expect(202)
@@ -115,7 +115,7 @@ describe('/', () => {
         })
     });
 
-    it.only('GET status 204 and removes article', () => {
+    it('GET status 204 and removes article', () => {
       return request
         .delete('/api/articles/2')
         .expect(204)
@@ -127,8 +127,39 @@ describe('/', () => {
               expect(article.article_id !== 2).to.equal(true)
             })
           
-        })
+          })
+      });
     });
   });
-});
+
+  describe('/users', () => {
+    it('GET status 200 and returns a user by username buter_bridge', () => {
+      return request 
+      .get('/api/users/butter_bridge')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.user).to.eql([{
+          username: 'butter_bridge',
+          avatar_url: 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg',
+          name: 'jonny' 
+          }])
+      })
+      
+    });
+
+    it('GET status 200 and returns a user by username icellusedkars', () => {
+      return request 
+      .get('/api/users/icellusedkars')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.user).to.eql([{
+          username: 'icellusedkars',
+          name: 'sam',
+          avatar_url: 'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4',
+        }])
+      })
+      
+    });
+    
+  });
 });
