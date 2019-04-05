@@ -1,4 +1,5 @@
 const { fetchArticles, fetchArticleByID, updateArticleByID, deleteArticleByID, fetchCommentsByArticleID} = require('../models/articles-model');
+const {routeNotFound} = require('../errors/index')
 
 exports.getArticles = (req, res, next) => {
   fetchArticles(req.query)
@@ -9,8 +10,10 @@ exports.getArticles = (req, res, next) => {
 }
 
 exports.getArticlesByID = (req, res, next) => {
-  fetchArticleByID(req.params.article_id).then(article => {
-    res.status(200).send({article});
+  fetchArticleByID(req.params.article_id)
+    .then(([article]) => {
+    if(!article) return Promise.reject({status : 404});
+    else res.status(200).send({article});
   })
   .catch(next);
 }

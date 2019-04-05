@@ -91,20 +91,23 @@ describe('/', () => {
         .get('/api/articles/1')
         .expect(200)
         .then((res) => {
-          expect(res.body.article.length).to.equal(1)
-          expect(res.body.article[0].article_id).to.equal(1)
+          //console.log(res.body.article)
+          expect(res.body.article.article_id).to.equal(1)
         })
     });
 
-    it.only('GET status 400 responds with err message when request is made with bad ID', () => {
+    it('GET status 400 responds with err message when request is made with bad ID', () => {
       return request
         .get('/api/articles/abc')
         .expect(400)
-        .then((res) => {
-          console.log(res.body)
-          expect(res.body.msg).to.equal('Bad Request')
-        })
     });
+
+    it('GET status 404 responds with err message when request is made with an ID that doest exist', () => {
+      return request
+        .get('/api/articles/1000')
+        .expect(404)
+    });
+
     it('GET status 202 and update number of votes by 1', () => {
       return request
         .patch('/api/articles/1?vote_inc=1')
@@ -204,9 +207,9 @@ describe('/', () => {
       .delete('/api/comments/2')
         .expect(204)
         .then((res) => {
-          return request
-          .get('/api/comments/2')
-          .expect(404)
+          // return request
+          // .get('/api/comments/2')
+          // .expect(404)
         });
     });
   });
@@ -240,5 +243,15 @@ describe('/', () => {
         }])
       }) 
     }); 
+
+    it('GET 405 errors for methods not allowed', () => {
+      return request
+      .put('/api/users')
+      .expect(405)
+      .then(res => {
+        expect(res.body.msg).to.eql('Method Not Allowed')
+      })
+    })
+
   });
 });

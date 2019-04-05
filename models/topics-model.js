@@ -4,6 +4,7 @@ exports.fetchTopics = ({
   
 }) => {
   return connection
+    
     .select('*')
     .from('topics')
     

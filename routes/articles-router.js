@@ -13,6 +13,7 @@ articlesRouter
   .get(getArticlesByID)
   .patch(patchArticle)
   .delete(deleteArticle)
+  //.all(methodNotAllowed)
 
 articlesRouter
 .route('/:article_id/comments')

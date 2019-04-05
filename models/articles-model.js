@@ -21,13 +21,15 @@ exports.fetchArticles = ({
 };
 
 exports.fetchArticleByID = (article_id) => {
-  return connection
+  const articlesQuery = connection
     .select('articles.article_id', 'articles.author', 'articles.body', 'articles.created_at', 'articles.title', 'articles.topic', 'articles.votes')
-    .where('articles.article_id', '=', article_id)
     .count({comment_count : 'comments.comment_id'})
     .leftJoin('comments', 'articles.article_id', 'comments.article_id')
     .from('articles')
     .groupBy('articles.article_id')
+    if({article_id}) articlesQuery.where('articles.article_id', '=', article_id)
+    console.log({article_id})
+    return articlesQuery
 };
 
 exports.updateArticleByID = (article_id, amount) => {
