@@ -5,14 +5,14 @@ exports.getArticles = (req, res, next) => {
     .then((articles) => {
       res.status(200).send({articles});
     })
-    .catch();
+    .catch(next);
 }
 
 exports.getArticlesByID = (req, res, next) => {
   fetchArticleByID(req.params.article_id).then(article => {
     res.status(200).send({article});
   })
-  .catch();
+  .catch(next);
 }
 
 exports.patchArticle = (req, res, next) => {
@@ -20,6 +20,7 @@ exports.patchArticle = (req, res, next) => {
   .then(article => {
     res.status(202).send({article})
   })
+  .catch(next);
 }
 
 exports.deleteArticle = (req, res, next) => {
@@ -27,5 +28,6 @@ exports.deleteArticle = (req, res, next) => {
   .then(article => {
     res.status(204).send()
   })
+  .catch(next);
 }
 

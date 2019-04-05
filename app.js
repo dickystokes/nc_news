@@ -12,4 +12,11 @@ app.all('/*', routeNotFound);
 
 app.use(handle500);
 
+app.use((err, req, res, next) => {
+    const badRequestCodes = ['22P02'];
+    if (badRequestCodes.includes(err.code)) {
+      res.status(400).send({ msg: err.message || 'Bad Request' });
+    } else next(err);
+});
+
 module.exports = app;

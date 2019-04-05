@@ -95,6 +95,16 @@ describe('/', () => {
           expect(res.body.article[0].article_id).to.equal(1)
         })
     });
+
+    it.only('GET status 400 responds with err message when request is made with bad ID', () => {
+      return request
+        .get('/api/articles/abc')
+        .expect(400)
+        .then((res) => {
+          console.log(res.body)
+          expect(res.body.msg).to.equal('Bad Request')
+        })
+    });
     it('GET status 202 and update number of votes by 1', () => {
       return request
         .patch('/api/articles/1?vote_inc=1')
@@ -169,7 +179,7 @@ describe('/', () => {
   
 
   describe('/comments', () => {
-    it.only('GET 202 updates comment votes', () => {
+    it('GET 202 updates comment votes', () => {
       return request
       .patch('/api/comments/1?vote_inc=1')
         .expect(202)
@@ -189,7 +199,7 @@ describe('/', () => {
           });
         });
       });
-    it.only('GET 204 deletes comment', () => {
+    it('GET 204 deletes comment', () => {
       return request
       .delete('/api/comments/2')
         .expect(204)
